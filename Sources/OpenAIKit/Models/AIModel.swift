@@ -60,8 +60,10 @@ public extension AIModelType {
 
 	/// GPT-3.5 models can understand and generate natural language or code. Our most capable and cost effective model is gpt-3.5-turbo which is optimized for chat but works well for traditional completions tasks as well.
 	enum GPTv3_5Model: String {
-		/// Most capable GPT-3.5 model and optimized for chat at 1/10th the cost of text-davinci-003. Will be updated with our latest model iteration.
+		/// Most capable GPT-3.5 model and optimized for chat at 1/10th the cost of text-davinci-003. Will be updated with our latest model iteration. Allow 4k tokens.
 		case gptTurbo = "gpt-3.5-turbo"
+		/// Most capable GPT-3.5 model and optimized for chat at 1/10th the cost of text-davinci-003. Will be updated with our latest model iteration. Allow 16k tokens.
+		case gptTurbo16k = "gpt-3.5-turbo-16k"
 		/// Can do any language task with better quality, longer output, and consistent instruction-following than the curie, babbage, or ada models. Also supports inserting completions within text.
 		case davinciText003 = "text-davinci-003"
 		/// Similar capabilities to text-davinci-003 but trained with supervised fine-tuning instead of reinforcement learning
