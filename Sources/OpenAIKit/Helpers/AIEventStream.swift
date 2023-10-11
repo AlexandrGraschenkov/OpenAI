@@ -69,6 +69,7 @@ public final class AIEventStream<ResponseType: Decodable>: NSObject, URLSessionD
 	// MARK: - URLSessionDataDelegate
 
     public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    	print("••• checker \(credentialChecker)")
     	if let checker = credentialChecker, 
     		checker.urlSession?(session, didReceive: challenge, completionHandler: completionHandler) != nil {
     			// handled
