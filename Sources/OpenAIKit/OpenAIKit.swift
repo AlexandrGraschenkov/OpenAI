@@ -18,17 +18,17 @@ public final class OpenAIKit {
 	internal let jsonEncoder = JSONEncoder.aiEncoder
 	
 	/// Initialize `OpenAIKit` with your API Token wherever convenient in your project. Organization name is optional.
-	public init(apiToken: String, organization: String? = nil, timeoutInterval: TimeInterval = 60) {
+	public init(apiToken: String, organization: String? = nil, session: URLSession? = nil) {
 		self.apiToken = apiToken
 		self.organization = organization
 		
 		let configuration = URLSessionConfiguration.default
-		configuration.timeoutIntervalForRequest = timeoutInterval
-		configuration.timeoutIntervalForResource = timeoutInterval
+		configuration.timeoutIntervalForRequest = 60
+		configuration.timeoutIntervalForResource = 60
 
-		let session = URLSession(configuration: configuration)
+		let resultSession = session ?? URLSession(configuration: configuration)
 		
-		network = OpenAIKitNetwork(session: session)
+		network = OpenAIKitNetwork(session: resultSession)
 	}
 }
 
