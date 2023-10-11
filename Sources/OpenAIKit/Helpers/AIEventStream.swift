@@ -23,6 +23,7 @@ public struct AIStreamResponse<ResponseType: Decodable> {
 public final class AIEventStream<ResponseType: Decodable>: NSObject, URLSessionDataDelegate {
 	private let request: URLRequest
 	private var session: URLSession?
+	private let credentialChecker: URLSessionDelegate?
 	private var operationQueue: OperationQueue
 
 	private var onStartCompletion: (() -> Void)?
@@ -33,10 +34,12 @@ public final class AIEventStream<ResponseType: Decodable>: NSObject, URLSessionD
 
 	private var fetchError: Error? = nil
 
-	init(request: URLRequest) {
+
+	init(request: URLRequest, credentialChecker: URLSessionDelegate?) {
 		self.request = request
 		self.operationQueue = OperationQueue()
 		operationQueue.maxConcurrentOperationCount = 1
+		self.credentialChecker = credentialChecker
 	}
 
 	public func startStream() {
@@ -64,6 +67,15 @@ public final class AIEventStream<ResponseType: Decodable>: NSObject, URLSessionD
 	}
 
 	// MARK: - URLSessionDataDelegate
+
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    	if let checker = credentialChecker, 
+    		checker.urlSession?(session, didReceive: challenge, completionHandler: completionHandler) != nil {
+    			// handled
+    	} else {
+    		completionHandler(.performDefaultHandling, nil)
+    	}
+    }
 
 	public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping @Sendable (URLSession.ResponseDisposition) -> Void) {
 		completionHandler(URLSession.ResponseDisposition.allow)

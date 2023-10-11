@@ -23,9 +23,17 @@ public enum OpenAINetworkError: Error {
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, *)
 public final class OpenAIKitNetwork {
 	private let session: URLSession
+	private let credentialChecker: URLSessionDelegate?
 
-	init(session: URLSession = URLSession.shared) {
-		self.session = session
+	init(credentialChecker: URLSessionDelegate?) {
+		let configuration = URLSessionConfiguration.ephemeral
+		configuration.timeoutIntervalForRequest = 60
+		configuration.timeoutIntervalForResource = 60
+
+		self.session = URLSession(configuration: configuration,
+                                  delegate: credentialChecker,
+                                  delegateQueue: nil)
+		self.credentialChecker = credentialChecker
 	}
 
 	func request<ResponseType: Decodable>(_ method: OpenAIHTTPMethod, url: String, body: Data? = nil, headers: OpenAIHeaders? = nil, completion: @escaping (Result<ResponseType, Error>) -> Void) {
@@ -96,7 +104,7 @@ public final class OpenAIKitNetwork {
 			request.addValue(value, forHTTPHeaderField: key)
 		}
 
-		let stream = AIEventStream<ResponseType>(request: request)
+		let stream = AIEventStream<ResponseType>(request: request, credentialChecker: credentialChecker)
 		var streamState = StreamTaskState()
 
 		stream.onMessage { data, message in
@@ -131,7 +139,7 @@ public final class OpenAIKitNetwork {
 			request.addValue(value, forHTTPHeaderField: key)
 		}
 
-		let stream = AIEventStream<ResponseType>(request: request)
+		let stream = AIEventStream<ResponseType>(request: request, credentialChecker: credentialChecker)
 
 		return AsyncThrowingStream<AIStreamResponse<ResponseType>, Error> { continuation in
 			Task(priority: .userInitiated) {
