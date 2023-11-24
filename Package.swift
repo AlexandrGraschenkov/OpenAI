@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
 	name: "OpenAIKit",
+    platforms: [
+        .iOS(.v13)
+    ],
 	products: [
 		.library(
 			name: "OpenAIKit",
