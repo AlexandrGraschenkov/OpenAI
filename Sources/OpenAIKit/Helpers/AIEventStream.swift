@@ -117,7 +117,16 @@ public final class AIEventStream<ResponseType: Decodable>: NSObject, URLSessionD
 			return
 		}
 
-		try? onCompleteCompletion?(responseStatusCode, false, error ?? fetchError)
+		var error = error
+		if responseStatusCode >= 400, error == nil {
+			var message = "Text generation failed"
+            if responseStatusCode == 403 {
+                message = "Access denied"
+            }
+            error = NSError(domain: "", code: responseStatusCode, userInfo: [NSLocalizedDescriptionKey: message])
+		}
+        
+        try? onCompleteCompletion?(responseStatusCode, false, error ?? fetchError)
 	}
 
 	public func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
