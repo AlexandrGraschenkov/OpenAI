@@ -123,7 +123,7 @@ public final class AIEventStream<ResponseType: Decodable>: NSObject, URLSessionD
             if responseStatusCode == 403 {
                 message = "Access denied"
             }
-            error = NSError(domain: "", code: responseStatusCode, userInfo: [NSLocalizedDescriptionKey: message])
+            error = NSError(domain: "", code: responseStatusCode, userInfo: [NSLocalizedDescriptionKey: message]) as Error
 		}
         
         try? onCompleteCompletion?(responseStatusCode, false, error ?? fetchError)
