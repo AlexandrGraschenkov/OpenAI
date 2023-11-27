@@ -55,7 +55,9 @@ public extension AIModelType {
 		/// More capable than any GPT-3.5 model, able to do more complex tasks, and optimized for chat. Will be updated with our latest model iteration.
 		case gpt4 = "gpt-4"
 		/// Same capabilities as the base `gpt-4` mode but with 4x the context length. Will be updated with our latest model iteration.
-		case gpt4_32k = "gpt-4-32k"
+        case gpt4_32k = "gpt-4-32k"
+        /// Same capabilities as the base `gpt-4` mode but with 16x the context length. Will be updated with our latest model iteration.
+        case gpt4_128k = "gpt-4-1106-preview"
 	}
 
 	/// GPT-3.5 models can understand and generate natural language or code. Our most capable and cost effective model is gpt-3.5-turbo which is optimized for chat but works well for traditional completions tasks as well.
